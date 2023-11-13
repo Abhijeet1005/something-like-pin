@@ -16,7 +16,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  posts: [],
+  posts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post'
+  }],
   email: {
     type: String,
     required: true,

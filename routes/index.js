@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const userModel = require('./users')
-const postModel = require('./posts')
+const postModel = require('./posts');
+const { mongo } = require('mongoose');
+const { all } = require('../app');
 
 
 router.get('/', function(req, res, next) {
@@ -23,11 +25,20 @@ router.get('/createuser', async function(req, res, next) {
 router.get('/createpost', async function(req, res, next) {
   let createdpost = await postModel.create(
     {
-      postText: 'this is some dummy post text',
+      postText: 'this is second post from the same user ',
+      user: '6552028edb72068061e6806b'
     }
   )
+  let user  = await userModel.findOne({_id: '6552028edb72068061e6806b'})
+  user.posts.push(createdpost._id);
+  await user.save();
+  res.send("done")
+});
 
-  res.send(createdpost)
+router.get('/userposts', async function(req, res, next) {
+  let allusers = await userModel.findOne({_id: '6552028edb72068061e6806b'}).populate('posts') //This populates the IDs with the associated data and it knows coz we passed ref with type
+  
+  res.send(allusers)
 });
 
 
