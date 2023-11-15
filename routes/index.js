@@ -4,43 +4,43 @@ const userModel = require('./users')
 const postModel = require('./posts');
 const { mongo } = require('mongoose');
 const { all } = require('../app');
+const passport = require('passport');
+const localStrategy = require('passport-local') // this line helps the pasport to work with local authentication
+passport.authenticate(new localStrategy(userModel.authenticate()))
 
-
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/',function(req,res){
+  res.render('index',{title: 'Express'})
 });
+router.get('/profile',isLoggedIn,function(req,res){
+  res.send("profile")
+});
+router.post('/register',function(req,res){
+  const {username, email, fullname} = req.body; //Object destructuring to fetch all three
+  const userData = new userModel({username, email, fullname}); //then just simply pass them directly
 
-router.get('/createuser', async function(req, res, next) {
-  let createduser = await userModel.create(
-    {
-      username: 'asc',
-      password: 'asc',
-      fullName: 'abhijet singh chauhan',
-      posts: [],
-      email: 'asc@gmail.com',
+  userModel.register(userData,req.body.password) //This is due to plm
+  .then(function(){
+    passport.authenticate('local')(req,res,function(){  //Then I think this line automatically uses plm to fetch auth credentials to verify
+      res.redirect('/profile')
     })
-
-  res.send(createduser)
+  })
 });
-router.get('/createpost', async function(req, res, next) {
-  let createdpost = await postModel.create(
-    {
-      postText: 'this is second post from the same user ',
-      user: '6552028edb72068061e6806b'
-    }
-  )
-  let user  = await userModel.findOne({_id: '6552028edb72068061e6806b'})
-  user.posts.push(createdpost._id);
-  await user.save();
-  res.send("done")
+router.post('/login',passport.authenticate('local',{
+  successRedirect: "/profile",
+  failureRedirect: "/"
+}),function(req,res){
 });
+router.post('/logout',function(req,res){
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+})
 
-router.get('/userposts', async function(req, res, next) {
-  let allusers = await userModel.findOne({_id: '6552028edb72068061e6806b'}).populate('posts') //This populates the IDs with the associated data and it knows coz we passed ref with type
-  
-  res.send(allusers)
-});
-
+function isLoggedIn(req,res,next){
+  if(req.isAuthenticated()) return next();
+  res.redirect('/');
+}
 
 
 
