@@ -14,7 +14,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-//Make sure the express session and passport are on the top otherwize some weird stuff happens
+//Make sure the express session and passport things are on the top otherwize some weird stuff happens
 app.use(expressSession({
   resave: false,
   saveUninitialized: false,
