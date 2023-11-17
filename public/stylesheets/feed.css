@@ -2,7 +2,7 @@
 {
   margin: 0;
   padding: 0;
-	background-color: #c2c2c2;
+  background-color: #c2c2c2;
   box-sizing: border-box;
   font-family: "Gill Sans", "Gill Sans MT", "Myriad          Pro", "DejaVu Sans Condensed", Helvetica, Arial,        "sans-serif";
 }
@@ -96,6 +96,7 @@ header{
 img:hover {
   
   opacity: .95;
+  transition: all 0.2s ease-in;
   box-shadow: 0 0 10px #020202;
 }
 
