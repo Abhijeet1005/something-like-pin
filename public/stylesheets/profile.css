@@ -99,6 +99,7 @@
   
   .btn-settings
   {
+    text-decoration: none;
     position: relative;
     padding: 15px 70px;
     top: -22px;

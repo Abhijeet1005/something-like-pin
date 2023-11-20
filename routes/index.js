@@ -23,6 +23,9 @@ router.get('/feed',function(req,res){
 router.get('/profile',isLoggedIn,function(req,res){
   res.render("profile")
 });
+router.get('/settings',isLoggedIn,function(req,res){
+  res.send("settings")
+});
 
 router.post('/register',function(req,res){
   const {username, email, fullname} = req.body; //Object destructuring to fetch all three
