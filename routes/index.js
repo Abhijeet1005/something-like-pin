@@ -13,7 +13,7 @@ router.get('/',function(req,res){
 });
 
 router.get('/login', function(req, res) {
-  console.log(req.flash('error'));
+  // console.log(req.flash('error')) // make sure to comment this when passing the error in render so that the flash doesnt get called twice and the array gets reset
   res.render('login', { error: req.flash('error') });
 });
 

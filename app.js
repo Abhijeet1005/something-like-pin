@@ -20,14 +20,11 @@ app.use(expressSession({
   secret: 'ayein?',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 60000 },
 }));
 app.use(passport.initialize())
 app.use(passport.session())
 passport.serializeUser(usersRouter.serializeUser())
 passport.deserializeUser(usersRouter.deserializeUser())
-//Make sure the express session and passport things are on the top otherwize some weird stuff happens
-
 app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.json());
