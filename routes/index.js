@@ -12,9 +12,11 @@ router.get('/',function(req,res){
   res.render('index',{title: 'Express'})
 });
 
-router.get('/login',function(req,res){
-  res.render('login')
+router.get('/login', function(req, res) {
+  console.log(req.flash('error'));
+  res.render('login', { error: req.flash('error') });
 });
+
 
 router.get('/feed',function(req,res){
   res.render('feed')
@@ -41,12 +43,13 @@ router.post('/register',function(req,res){
 
 router.post('/login',passport.authenticate('local',{
   successRedirect: "/profile",
-  failureRedirect: "/login"
+  failureRedirect: "/login",
+  failureFlash: true
 }),function(req,res){
 });
 
 
-router.post('/logout',function(req,res){
+router.get('/logout',function(req,res){
   req.logout(function(err) {
     if (err) { return next(err); }
     res.redirect('/');
