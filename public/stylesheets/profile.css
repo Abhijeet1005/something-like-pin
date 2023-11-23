@@ -140,6 +140,10 @@
     color: rgba(0,0,0,0.2);
     padding-top: 7px;
   }
+
+  .footerform{
+    padding: auto;
+  }
   
   @keyframes rotate{
     0%{
