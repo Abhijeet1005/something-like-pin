@@ -3,8 +3,9 @@ var router = express.Router();
 const userModel = require('./users')
 const postModel = require('./posts');
 const { mongo } = require('mongoose');
-const { all } = require('../app');
+const { all, post } = require('../app');
 const passport = require('passport');
+const upload = require('./multer')
 const localStrategy = require('passport-local') // this line helps the pasport to work with local authentication
 passport.use(new localStrategy(userModel.authenticate()))
 
@@ -13,7 +14,7 @@ router.get('/',function(req,res){
 });
 
 router.get('/login', function(req, res) {
-  // console.log(req.flash('error')) // make sure to comment this when passing the error in render so that the flash doesnt get called twice and the array gets reset
+  // console.log(req.flash('error')) //make sure to comment this when passing the error in render so that the flash doesnt get called twice and the array gets reset
   res.render('login', { error: req.flash('error') });
 });
 
@@ -22,8 +23,28 @@ router.get('/feed',function(req,res){
   res.render('feed')
 });
 
-router.get('/profile',isLoggedIn,function(req,res){
-  res.render("profile")
+router.post('/upload',isLoggedIn ,upload.single('file'),async function(req,res){ //here the upload.single("file") fetches the filename from the requests and sends it to multer for name change and upload
+  if(!req.file){
+    return res.status(404).send("where the file at bro?")
+  }
+  const user = await userModel.findOne({username: req.session.passport.user})
+  const newPost = await postModel.create({
+    postText: req.body.caption,
+    user: user._id,
+    image: req.file.filename  //This contains the changed filename after submit that uuid creates
+  });
+  user.posts.push(newPost._id)
+  await user.save();
+  res.send("Gotchu covered buddy, (hoping that image was not sus)")
+});
+
+router.get('/profile',isLoggedIn,async function(req,res){
+  const user = await userModel.findOne({
+    username: req.session.passport.user //passport store the logged in user in this session token
+  }).populate("posts")
+  
+
+  res.render("profile", {user: user})
 });
 router.get('/settings',isLoggedIn,function(req,res){
   res.send("settings")

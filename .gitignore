@@ -1,2 +1,4 @@
 node_modules
 .env
+multer.png
+/public/images/uploads/
