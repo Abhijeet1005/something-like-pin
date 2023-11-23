@@ -35,7 +35,7 @@ router.post('/upload',isLoggedIn ,upload.single('file'),async function(req,res){
   });
   user.posts.push(newPost._id)
   await user.save();
-  res.send("Gotchu covered buddy, (hoping that image was not sus)")
+  res.redirect("/profile")
 });
 
 router.get('/profile',isLoggedIn,async function(req,res){
