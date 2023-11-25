@@ -43,7 +43,6 @@ router.get('/profile',isLoggedIn,async function(req,res){
     username: req.session.passport.user //passport store the logged in user in this session token
   }).populate("posts")
   
-
   res.render("profile", {user: user})
 });
 router.get('/settings',isLoggedIn,function(req,res){
