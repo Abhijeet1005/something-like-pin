@@ -18,9 +18,11 @@ router.get('/login', function(req, res) {
   res.render('login', { error: req.flash('error') });
 });
 
-
 router.get('/feed',function(req,res){
   res.render('feed')
+});
+router.get('/forgot',function(req,res){
+  res.redirect("/")
 });
 
 router.post('/upload',isLoggedIn ,upload.single('file'),async function(req,res){ //here the upload.single("file") fetches the filename from the requests and sends it to multer for name change and upload
@@ -45,6 +47,7 @@ router.get('/profile',isLoggedIn,async function(req,res){
   
   res.render("profile", {user: user})
 });
+
 router.get('/settings',isLoggedIn,function(req,res){
   res.send("settings")
 });
@@ -67,7 +70,6 @@ router.post('/login',passport.authenticate('local',{
   failureFlash: true
 }),function(req,res){
 });
-
 
 router.get('/logout',function(req,res){
   req.logout(function(err) {
