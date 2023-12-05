@@ -18,7 +18,7 @@ router.get('/login', function(req, res) {
   res.render('login', { error: req.flash('error') });
 });
 
-router.get('/feed',function(req,res){
+router.get('/feed',isLoggedIn,function(req,res){
   res.render('feed')
 });
 router.get('/forgot',function(req,res){
